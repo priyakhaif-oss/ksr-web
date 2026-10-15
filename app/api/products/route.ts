@@ -1,0 +1,3 @@
+import {NextResponse} from "next/server";import {getDb} from "../../../lib/mongodb";import {starterProducts} from "../../../lib/products";
+export const dynamic="force-dynamic";
+export async function GET(){try{const c=(await getDb()).collection("products");if(await c.countDocuments()===0)await c.insertMany(starterProducts.map(p=>({...p,createdAt:new Date(),updatedAt:new Date()})));else{for(const p of starterProducts)if(p.image)await c.updateOne({id:p.id,$or:[{image:""},{image:null},{image:{$exists:false}}]},{$set:{image:p.image,updatedAt:new Date()}})}return NextResponse.json(await c.find({}, {projection:{_id:0}}).sort({name:1}).toArray())}catch(e){console.error(e);return NextResponse.json({error:"Database unavailable. Check MONGODB_URI."},{status:500})}}

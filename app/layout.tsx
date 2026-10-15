@@ -1,0 +1,1 @@
+import type {Metadata} from "next";import "./globals.css";export const metadata:Metadata={title:"Ksr Diary Foods | Freshness, Naturally",description:"Fresh cow milk, buffalo milk and premium buffalo milk."};export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en"><body>{children}</body></html>}
